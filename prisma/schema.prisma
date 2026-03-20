@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+// Configuración base (ya debería estar en tu archivo)
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  
+}
+
+// ==========================================
+// TUS MODELOS DE DATOS (TABLAS)
+// ==========================================
+
+// 1. El Agente de Viajes (Tú)
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String    // Guardaremos la contraseña encriptada
+  name      String
+  role      String    @default("AGENT") // Para el futuro: AGENT, ADMIN
+  createdAt DateTime  @default(now())
+  
+  // Relaciones: Un agente gestiona muchos clientes
+  clients   Client[]
+}
+
+// 2. El Cliente Final
+model Client {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  phone     String?   // El signo ? significa que es opcional
+  notes     String?   // Notas como "Vegetariano", "Pasillo"
+  createdAt DateTime  @default(now())
+
+  // Relaciones
+  agentId   Int
+  agent     User        @relation(fields: [agentId], references: [id])
+  itineraries Itinerary[]
+}
+
+// 3. El Itinerario / Viaje
+model Itinerary {
+  id          Int       @id @default(autoincrement())
+  name        String    // Ej: "Luna de Miel Japón"
+  status      String    @default("DRAFT") // DRAFT, CONFIRMED, CANCELLED
+  createdAt   DateTime  @default(now())
+
+  // Relaciones
+  clientId    Int
+  client      Client    @relation(fields: [clientId], references: [id])
+  flights     FlightSegment[]
+}
+
+// 4. Los Tramos de Vuelo
+model FlightSegment {
+  id            Int       @id @default(autoincrement())
+  origin        String    // Código IATA: MAD
+  destination   String    // Código IATA: NRT
+  departureTime DateTime
+  arrivalTime   DateTime
+  airline       String    // Ej: Iberia
+  flightNumber  String    // Ej: IB6801
+  
+  // Relaciones
+  itineraryId   Int
+  itinerary     Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+}
