@@ -1,0 +1,23 @@
+# Dependencias de Node
+node_modules/
+
+# Archivos de entorno (¡AQUÍ IRÁN TUS CONTRASEÑAS, NUNCA SE SUBE!)
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Logs de errores
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos del sistema operativo (Mac/Windows)
+.DS_Store
+Thumbs.db
+
+# Carpetas de compilación o testing (para el futuro)
+dist/
+build/
+coverage/
