@@ -25,9 +25,14 @@ app.get('/api', (req, res) => {
 // NUEVAS RUTAS CONECTADAS
 // ==========================================
 const agentRoutes = require('./routes/agentRoutes');
+const clientRoutes = require('./routes/clientRoutes'); // <--- NUEVO
+const itineraryRoutes = require('./routes/itineraryRoutes'); // <--- NUEVO
+const flightRoutes = require('./routes/flightRoutes'); // <--- NUEVO
 // Le decimos a Express: "Todo lo que empiece por /api/agentes, mándalo a agentRoutes"
 app.use('/api/agentes', agentRoutes);
-
+app.use('/api/clientes', clientRoutes); // <--- NUEVO
+app.use('/api/itinerarios', itineraryRoutes); // <--- NUEVO
+app.use('/api/vuelos', flightRoutes); // <--- NUEVO
 
 
 // 5. Definir el puerto y arrancar el servidor
