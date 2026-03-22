@@ -20,6 +20,16 @@ app.get('/api', (req, res) => {
     });
 });
 
+
+// ==========================================
+// NUEVAS RUTAS CONECTADAS
+// ==========================================
+const agentRoutes = require('./routes/agentRoutes');
+// Le decimos a Express: "Todo lo que empiece por /api/agentes, mándalo a agentRoutes"
+app.use('/api/agentes', agentRoutes);
+
+
+
 // 5. Definir el puerto y arrancar el servidor
 // Coge el puerto del archivo .env, y si no lo encuentra, usa el 3000 por defecto
 const PORT = process.env.PORT || 3000;
