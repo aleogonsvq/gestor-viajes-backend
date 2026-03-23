@@ -47,7 +47,40 @@ const getItinerariesByClient = async (req, res) => {
     }
 };
 
+// Actualizar un itinerario
+const updateItinerary = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, status } = req.body;
+        
+        const updatedItinerary = await prisma.itinerary.update({
+            where: { id: parseInt(id) },
+            data: { name, status }
+        });
+        res.status(200).json(updatedItinerary);
+    } catch (error) {
+        res.status(400).json({ error: 'Error al actualizar el itinerario' });
+    }
+};
+
+// Eliminar un itinerario
+const deleteItinerary = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // Al borrar el itinerario, Prisma borrará sus vuelos automáticamente
+        // gracias a la relación "onDelete: Cascade" que pusimos en la base de datos.
+        await prisma.itinerary.delete({
+            where: { id: parseInt(id) }
+        });
+        res.status(200).json({ mensaje: 'Itinerario eliminado' });
+    } catch (error) {
+        res.status(400).json({ error: 'Error al eliminar el itinerario' });
+    }
+};
+
 module.exports = {
     createItinerary,
-    getItinerariesByClient
+    getItinerariesByClient,
+    updateItinerary,   // <--- NUEVO
+    deleteItinerary    // <--- NUEVO
 };

@@ -42,8 +42,44 @@ const getClientsByAgent = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener los clientes' });
     }
 };
+// Actualizar un cliente
+const updateClient = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, email, phone, notes } = req.body;
+        
+        const updatedClient = await prisma.client.update({
+            where: { id: parseInt(id) },
+            data: { name, email, phone, notes }
+        });
+        res.status(200).json(updatedClient);
+    } catch (error) {
+        res.status(400).json({ error: 'Error al actualizar el cliente' });
+    }
+};
 
+// Eliminar un cliente
+const deleteClient = async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // 1. Primero borramos todos los itinerarios de este cliente
+        await prisma.itinerary.deleteMany({
+            where: { clientId: parseInt(id) }
+        });
+        
+        // 2. Ahora ya podemos borrar al cliente sin que la base de datos se queje
+        await prisma.client.delete({
+            where: { id: parseInt(id) }
+        });
+        res.status(200).json({ mensaje: 'Cliente y sus viajes eliminados' });
+    } catch (error) {
+        res.status(400).json({ error: 'Error al eliminar el cliente' });
+    }
+};
 module.exports = {
     createClient,
-    getClientsByAgent
+    getClientsByAgent,
+    updateClient,    // <--- NUEVO
+    deleteClient
 };

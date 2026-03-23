@@ -8,5 +8,7 @@ router.post('/', clientController.createClient);
 
 // Ruta para ver los clientes de un agente (usamos un parámetro en la URL :agentId)
 router.get('/agente/:agentId', clientController.getClientsByAgent);
-
+// Rutas para editar y borrar
+router.put('/:id', clientController.updateClient);
+router.delete('/:id', clientController.deleteClient);
 module.exports = router;

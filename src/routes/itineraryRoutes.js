@@ -9,4 +9,8 @@ router.post('/', itineraryController.createItinerary);
 // Ruta para ver los itinerarios de un cliente (GET /api/itinerarios/cliente/1)
 router.get('/cliente/:clientId', itineraryController.getItinerariesByClient);
 
+// Rutas para editar y borrar (usando el ID en la URL)
+router.put('/:id', itineraryController.updateItinerary);
+router.delete('/:id', itineraryController.deleteItinerary);
+
 module.exports = router;
