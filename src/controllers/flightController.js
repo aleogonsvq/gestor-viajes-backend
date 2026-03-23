@@ -51,7 +51,45 @@ const getFlightsByItinerary = async (req, res) => {
     }
 };
 
+// Actualizar un vuelo
+const updateFlight = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { origin, destination, departureTime, arrivalTime, airline, flightNumber } = req.body;
+
+        const updatedFlight = await prisma.flightSegment.update({
+            where: { id: parseInt(id) },
+            data: {
+                origin,
+                destination,
+                departureTime: new Date(departureTime), // Aseguramos formato de fecha
+                arrivalTime: new Date(arrivalTime),
+                airline,
+                flightNumber
+            }
+        });
+        res.status(200).json(updatedFlight);
+    } catch (error) {
+        res.status(400).json({ error: 'Error al actualizar el vuelo' });
+    }
+};
+
+// Eliminar un vuelo
+const deleteFlight = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await prisma.flightSegment.delete({
+            where: { id: parseInt(id) }
+        });
+        res.status(200).json({ mensaje: 'Vuelo eliminado correctamente' });
+    } catch (error) {
+        res.status(400).json({ error: 'Error al eliminar el vuelo' });
+    }
+};
+
 module.exports = {
     createFlight,
-    getFlightsByItinerary
+    getFlightsByItinerary,
+    updateFlight,    // <--- NUEVO
+    deleteFlight
 };
