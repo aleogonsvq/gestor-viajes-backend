@@ -77,9 +77,28 @@ const deleteClient = async (req, res) => {
         res.status(400).json({ error: 'Error al eliminar el cliente' });
     }
 };
+
+// Obtener un solo cliente por su ID
+const getClientById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const client = await prisma.client.findUnique({
+            where: { id: parseInt(id) }
+        });
+        
+        if (!client) {
+            return res.status(404).json({ error: 'Cliente no encontrado' });
+        }
+        
+        res.status(200).json(client);
+    } catch (error) {
+        res.status(400).json({ error: 'Error al obtener el cliente' });
+    }
+};
 module.exports = {
     createClient,
     getClientsByAgent,
     updateClient,    // <--- NUEVO
-    deleteClient
+    deleteClient,
+    getClientById
 };

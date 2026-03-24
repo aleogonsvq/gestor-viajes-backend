@@ -11,4 +11,6 @@ router.get('/agente/:agentId', clientController.getClientsByAgent);
 // Rutas para editar y borrar
 router.put('/:id', clientController.updateClient);
 router.delete('/:id', clientController.deleteClient);
+// Obtener un cliente específico por su ID
+router.get('/:id', clientController.getClientById);
 module.exports = router;
